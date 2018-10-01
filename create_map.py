@@ -66,5 +66,5 @@ def process(num):
         return num+1
 
 
-world_boundary, obstacles, start_goal = load_map('/Users/segfault/Desktop/map_1.txt')
+world_boundary, obstacles, start_goal = load_map('map_1.txt')
 print black_list(world_boundary, obstacles)
