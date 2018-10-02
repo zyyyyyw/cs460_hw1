@@ -1,5 +1,6 @@
-import Queue
-import Graph
+import utils
+import create_map
+import math
 def a_star(start, end):
     h = {}
     graph = init_graph()
@@ -41,7 +42,10 @@ def a_star(start, end):
                         neighbor.setParent(node)
         visited.append(node)
     return None
-def init_H(points, vals):
+def init_H(s, goal):
+    sx,sy = start
+    gx,gy = goal
+    return sqrt(abs(sx-gx)**2+abs(sy-gy)**2)
 def init_graph():
 
 def LineOfSight(s, s’):

@@ -9,6 +9,8 @@ class Graph:
         self.distances[(node2, node1)] = weight;
     def getDistance(node1, node2):
         return self.distance[(node1, node2)]
+    def getVertices():
+        return self.vertices
         
 class Queue: 
     def __init__(self):
