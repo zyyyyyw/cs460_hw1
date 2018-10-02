@@ -1,68 +1,82 @@
 from utils import *
 import create_map
 import math
-def a_star(graph, start, goal):
+import argparse
 
+def a_star(graph, start, goal):
     h = init_H(graph, goal)
     distance = {}
     visited = []
     queue = Queue()
-   
-    
-    for node in graph.getVertices:
+    start = graph.find_node(start)
+    goal = graph.find_node(goal)
+    for node in graph.getVertices():
         distance[node] = None
     distance[start] = 0
     start.setParent(None)
     queue.enqueue(start, h[start])
-    while (!queue.isEmpty):
+    while not queue.isEmpty():
         node = queue.dequeue()
-        if(node.name == goal): return generatePath(node)
-        for neighbor in node.neigbors:
-            if(neighbor not in visited):
-                if(distance[neighbor]!= None)
-                    if((distance[node]+graph.getDistance[node, neighbor])<distance[neighbor])
-                        distance[neigbor] = distance[node] + graph.getDistance[(node, neighbor)]
-                        neighbor.val = distance[neighbor]+h[neighbor]
+        if node == goal:
+            return generatePath(node)
+        for neighbor in node.get_neighbor():
+            if neighbor not in visited:
+                if distance[neighbor] is not None:
+                    if (distance[node] + graph.getDistance(node, neighbor)) < distance[neighbor]:
+                        distance[neighbor] = distance[node] + graph.getDistance(node, neighbor)
+                        neighbor.val = distance[neighbor] + h[neighbor]
                         neighbor.setParent(node)
                 else:
-                    distance[neighbor] = graph.getDistance[(node, neighbor)]+distance[node]
+                    distance[neighbor] = graph.getDistance(node, neighbor) + distance[node]
                     queue.enqueue(neighbor, h[neighbor] + distance[neighbor])
                     neighbor.setParent(node)
         visited.append(node)
     return "path not found"
-def init_H(grahp, goal):
+
+
+def init_H(graph, goal):
     h = {}
-    for s in getVertices() 
-        sx,sy = s
-        gx,gy = goal
-        h[s] = math.sqrt(2)*min([abs(sx-gx), abs(sy,gy)])+max([abs(sx-gx), abs(sy,gy)])-min(abs(sx-gx), abs(sy,gy))
+    for s in graph.getVertices():
+        sx, sy = s.get_coord()
+        gx, gy = goal
+        h[s] = math.sqrt(2) * min([abs(sx - gx), abs(sy - gy)]) + max([abs(sx - gx), abs(sy - gy)]) - min(abs(sx - gx),
+                                                                                                          abs(sy - gy))
     return h
-    
-def init_graph(grahp, world_boundary, blacklist):
-    x_list = [x for x,y in world_boundary]
-    y_list = [y for x,y in world_boundary]
+
+
+def init_graph(graph, world_boundary, blacklist):
+    x_list = [x for x, y in world_boundary]
+    y_list = [y for x, y in world_boundary]
     x_min = min(x_list)
     y_min = min(y_list)
     x_max = max(x_list)
     y_max = max(y_list)
-    while(x_min<=x_max):
-        while(y_min<=x_max):
-            neighors = potentialNeighbor(x_min,y_min)
-            for point in neigbors
-                if(point not in blacklist):
-                    x,y = point
-                    graph.addVertex(point)
-                    graph.addEdge((x_min,y_min),point, math.sqrt(abs((x - x_min)**2+abs((y - y_min)**2))))
-            y_min += 1
-        x_min += 1
-            
-def potentialNeighbor(x, y):
-    return [(x-1, y), (x-1, y-1), (x, y-1), (x+1,y+1), (x+1,y),(x, y+1), (x+1,y-1), (x-1,y+1)]
+    for x in range(int(x_min), int(x_max+1), 1):
+        for y in range(int(y_min), int(y_max+1), 1):
+            graph.addVertex((x, y))
+    list = graph.get_list()
+    for node in list:
+        node.setNeighbor(blacklist, graph)
+
+
+
+
+
 
 def generatePath(node):
-    
-    
+    list = []
+    while not node == None:
+        list.append(node.get_coord())
+        node = node.parent
+    return list[::-1]
 
-world_boundary, obstacles, start_goal = load_map('map_1.txt')
-grahp = Graph()
-init_graph(grahp, world_boundary, blacklist)
+
+if __name__ == "__main__":
+    file_path = "map_1.txt"
+    start = (1,1)
+    goal = (2,2)
+    world_bundary, obstacles, start_goal = create_map.load_map(file_path)
+    blacklist = create_map.black_list(world_bundary, obstacles)
+    graph = Graph()
+    init_graph(graph, world_bundary, blacklist)
+    print a_star(graph, start, goal)
