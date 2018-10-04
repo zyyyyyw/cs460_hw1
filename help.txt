@@ -1,0 +1,9 @@
+roscore
+
+source catkin_ws/devel/setup.bash
+export SVGA_VGPU10=0
+rosparam set goal_position [x,y]
+ROBOT_INITIAL_POSE="-x <x of start position> -y <y of start position>" roslaunch turtlebot_gazebo turtlebot_world.launch world_file:= <directory of world x.world>.
+
+source catkin_ws/devel/setup.bash
+rosrun turtlebot_ctrl turtlebot_control.py
